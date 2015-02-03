@@ -91,7 +91,7 @@
   }
 
   function getResult(allResults, student, topic) {
-    switch(allResults[topic][student]) {
+    switch(allResults[topic][student.Github]) {
       case 'success': return '\u2713';
       case 'failure': return '\u2717';
       default: return '-';
@@ -103,7 +103,7 @@
 
     students.forEach(function(student) {
       Object.keys(homeWorks).forEach(function(homeWork) {
-        student[homeWork] = getStudentResult(student.Github, homeWork);
+        student[homeWork] = getStudentResult(student, homeWork);
       });
     });
   }
