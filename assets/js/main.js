@@ -75,9 +75,9 @@
   ]
 
   function githubBuild(repoName, githubResults) {
-    for (var i = 0; i < githubResults.length; i++) {
-      if (githubResults[i].repo === repoName) return githubResults[i];
-    }
+    return githubResults.filter(function(res) {
+      return res.repo === repoName;
+    })[0];
   }
 
   function homeworkResults(githubResults, homeWorks) {
@@ -99,22 +99,13 @@
   }
 
   function addHomeWorkResults(students, homeWorks, githubResults) {
-    var getStudentResult = (function(allResults) {
-      return function(student, topic) {
-        return getResult(allResults, student, topic);
-      }
-    })(homeworkResults(githubResults, homeWorks));
+    var getStudentResult = getResult.bind(null, homeworkResults(githubResults, homeWorks));
 
-    var student;
-
-    for (var i = 0; i < students.length; i++) {
-      student = students[i];
-      for (var hw in homeWorks) {
-        student[hw] = getStudentResult(student.Github, hw);
-      }
-    }
-
-    return students;
+    students.forEach(function(student) {
+      Object.keys(homeWorks).forEach(function(homeWork) {
+        student[homeWork] = getStudentResult(student.Github, homeWork);
+      });
+    });
   }
 
   addHomeWorkResults(students, homeWorks, githubResults);
